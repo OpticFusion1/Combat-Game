@@ -36,16 +36,18 @@ public class CombatGame {
     }
     }
     void showGameOver(Room r) throws InterruptedException {
+        tick.turnOnTicker(r.outPut);
         r.drawRoom();
         tick.add("\n You have been defeated!");
         
     }
     public void combatRound(Scanner in, Player player) throws InterruptedException{
+        tick.turnOnTicker(player.roomAddress.outPut);
         player.roomAddress.drawRoom();
         int moves = player.speed/5;
         tick.add("\nRound " + turnBeans + " Fight! Current target: "
-                + player.target.title);
-        tick.add("Distance: " + ruler.measureDistance(player, player.target));
+                + player.target.title + "\n");
+        tick.add("Distance: " + ruler.measureDistance(player, player.target) + "\n");
         
         
         for (int i = 0; i < player.roomAddress.roomContains.size(); i++) {
@@ -121,11 +123,11 @@ public class CombatGame {
         
     }
     void playerCombatPrompt (Scanner in, Player user) throws InterruptedException {
+        tick.turnOnTicker(user.roomAddress.outPut);
         
-        //System.out.println("Fight!");
-        
+       
         user.reportStats();
-        System.out.println("Combat Options: Enter a number and hit enter:\n"
+        tick.updateActionBar("Combat: "
                 + "1: " + user.weaponEquiped.title + "   "
                 + "2: " + user.preparedSpell.title + "   "
                 + "3: Use Item     "
@@ -141,25 +143,26 @@ public class CombatGame {
             
         }
         if (attackMode == 3) {
-            System.out.println("Inventory:  Enter item number.");
+            tick.add("Inventory:  Enter item number.\n");
             openInventory(user, user.target);
             
         }
         if (attackMode == 4) {
-            System.out.println("Enter target number.");
-            drawRoomSelection (user.roomAddress);
+            tick.updateActionBar("Enter target number.");
+            user.roomAddress.drawRoomSelection ();
             int newTargetNumber = in.nextInt();  // User input here
             user.target = user.roomAddress.roomContains.get(newTargetNumber-1);
-            System.out.println("New target: "
-                + user.target.title);
-            System.out.println("Distance: " + ruler.measureDistance(user, user.target));
+            tick.add("New target: "
+                + user.target.title + "\n");
+            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
+            user.roomAddress.drawRoom();
             playerCombatPromptNoMove(in, user);
             
         }
         if (attackMode == 5) {
             for (int moves = stepsLeft; moves > 0; moves--) {
-            tick.add("You have " + moves + " left.\n"
-                    + "Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
+            tick.add("You have " + moves + " left.\n");
+            tick.updateActionBar("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
             user.roomAddress.drawRoom();
             int moveDirection = in.nextInt();  // User input here
             if (moveDirection == 5) {
@@ -167,17 +170,18 @@ public class CombatGame {
             }
             user.moveChar(user, moveDirection);
             }
-            tick.add("Distance: " + ruler.measureDistance(user, user.target));
+            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
             playerCombatPromptNoMove(in, user);
             
         }
     }
     void playerCombatPromptNoMove (Scanner in, Player user) throws InterruptedException {
         
-        //System.out.println("Fight!");
+        
+
         
         
-        System.out.println("Combat Options: Enter a number and hit enter:\n"
+        tick.updateActionBar("Combat:"
                 + "1: " + user.weaponEquiped.title + "   "
                 + "2: " + user.preparedSpell.title + "   "
                 + "3: Use Item     "
@@ -192,30 +196,31 @@ public class CombatGame {
             
         }
         if (attackMode == 3) {
-            System.out.println("Invantory:  Enter item number.");
+            tick.updateActionBar("Invantory:  Enter item number.");
             openInventory(user, user.target);
             
         }
         if (attackMode == 4) {
-            System.out.println("Enter target number.");
-            drawRoomSelection (user.roomAddress);
+            tick.updateActionBar("Enter target number.");
+            user.roomAddress.drawRoomSelection ();
             int newTargetNumber = in.nextInt();  // User input here
-            user.target = user.roomAddress.roomContains.get(newTargetNumber);
-            System.out.println("New target: "
-                + user.target.title);
-            System.out.println("Distance: " + ruler.measureDistance(user, user.target));
-            playerCombatPrompt(in, user);
+            user.target = user.roomAddress.roomContains.get(newTargetNumber-1);
+            tick.add("New target: "
+                + user.target.title + "\n");
+            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
+            playerCombatPromptNoMove(in, user);
             
         }
     }
     void displayRoomOccupants (Room r, Player player) throws InterruptedException {
-        System.out.println("Characters in Combat: ");
+         tick.turnOnTicker(r.outPut);
+        tick.add("Characters in Combat: \n");
         for (int i = 0; i < r.roomContains.size(); i++) {
             if (r.roomContains.get(i).alive == true) {
-            System.out.print(r.roomContains.get(i).title +". ");
+            tick.addFast(r.roomContains.get(i).title +". ");
         }
         }
-        System.out.print("\n");
+        tick.addFast("\n");
         describeCharacter(player);
         
         for (int i = 0; i < r.roomContains.size(); i++) {
@@ -225,31 +230,15 @@ public class CombatGame {
         }
         }
     }
-    void drawRoomSelection(Room r) {
-        for (int i = 0; i < r.roomContains.size(); i++) {
-                r.roomContains.get(i).selectionNumber = i + 1;
-            }
-        for (int row = 0 ; row < r.height; row++) {
-            for (int col = 0 ; col < r.width; col++){
-              if (r.roomTiles[row][col].cellOccupied() == true) {
-                 System.out.print(r.roomTiles[row][col].cellContains.get(0).selectionNumber + " "); 
-              }
-              else {
-                  System.out.print(r.roomTiles[row][col].icon + " ");
-              }
-                
-            }
-            System.out.print("\n");
-}
-}
+
     void describeCharacter(Character c) throws InterruptedException {
+        tick.turnOnTicker(c.roomAddress.outPut);
         tick.add("\n" + c.title);
         if (c.alive == false) {
-            System.out.println(" Corpse");
+            tick.addFast(" Corpse\n");
         }
-        System.out.println("HP: " + c.healthPoints);
-        System.out.println("Armor:" + c.armorClass);
-        System.out.println("Attack" + c.attackDamage + "\n");
+        tick.addFast("\nHP: " + c.healthPoints + "\nArmor:"
+                + "" + c.armorClass + "\nAttack" + c.attackDamage + "\n");
 
      }    
     public void weaponAttack(Character attacker, Character defender, Player player) throws InterruptedException {
@@ -258,11 +247,11 @@ public class CombatGame {
                 selector.setNextEnemy (attacker, player);
             }
             tick.add("It's a Hit! " + defender.title + " lost " 
-                    + attacker.attackDamage + " health.");
+                    + attacker.attackDamage + " health.\n");
             health.healthReport(defender);
         }
         else {
-            tick.add("Miss!");
+            tick.add("Miss!\n");
             
         }
     }
@@ -270,18 +259,21 @@ public class CombatGame {
         attacker.preparedSpell.use(attacker, defender, player);
     }    
     public void openInventory(Player user, Character target) throws InterruptedException {
-            System.out.println("0: Close Inventory");
+            String s = new String("");
+            s += ("0: Close Inventory");
+            
         for (int d = 0; d < user.inventory.size(); d++) {
             
-            System.out.println((d+1) + ": " + user.inventory.get(d).title + ""
+            s +=((d+1) + ": " + user.inventory.get(d).title + ""
                     + " (" + user.inventory.get(d).quantity + ")"); 
         } 
+        tick.updateActionBar(s);
         int itemSelect = in.nextInt();  // User input here
         if (itemSelect == 0) {
             playerCombatPromptNoMove (in, user);
         }
         else {
-         System.out.println(user.inventory.get(itemSelect-1).title);
+         tick.add(user.inventory.get(itemSelect-1).title + "\n");
         user.inventory.get(itemSelect-1).use(user);
         for (int d = 0; d < user.inventory.size(); d++) {
             if (user.inventory.get(d).quantity == 0) {
@@ -306,12 +298,12 @@ public class CombatGame {
                     r.encounterXP = r.encounterXP + r.roomNPCs.get(i).XP;
                 }
                 player.XP = player.XP + r.encounterXP;
-                tick.add("You gained " + r.encounterXP + " XP.");
+                tick.add("You gained " + r.encounterXP + " XP.\n");
                 player.checkLevelUp();
                 
                 
                 r.drawRoom();
-            tick.add("\nYou stand victorious over your vanquished foes");
+            tick.add("\nAll enemies in this room lay dead.\n");
             }
         }
 }

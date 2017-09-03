@@ -5,8 +5,10 @@ package combat.game;
  * @author Chris
  */
 public class LightningBolt extends Spell{
+    Ticker tick = new Ticker();
     Dice dice = new Dice();
     TargetSelector selector = new TargetSelector();
+    
     HealthReporter h = new HealthReporter();
     Ruler ruler = new Ruler();
     public LightningBolt() {
@@ -17,10 +19,11 @@ public class LightningBolt extends Spell{
         standOff = 0;
     }
     public void use(Character attacker, Character defender, Player player) throws InterruptedException {
+        tick.turnOnTicker(player.roomAddress.outPut);
         double dis = ruler.measureDistance(attacker, defender);
         if (dis <= range && dis >= standOff) {
-        System.out.println(attacker.title + " " + useVerb + " a " + 
-                title + " at " + defender.title);
+        tick.add(attacker.title + " " + useVerb + " a " + 
+                title + " at " + defender.title + "\n");
         int d = dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6)
                 + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6);
         int halfD = d/2;
@@ -30,7 +33,7 @@ public class LightningBolt extends Spell{
             if (iRoll <= savingThrow) {
                 defender.healthPoints = defender.healthPoints-d;
                 tick.add(attacker.title +" hit " + defender.title + ""
-                        + " with a " + title + " causing " + d + " damage.");
+                        + " with a " + title + " for " + d + " damage.\n");
                 h.checkCharacterLife(defender);
                 h.healthReport(defender);
             }
@@ -38,7 +41,7 @@ public class LightningBolt extends Spell{
             if (iRoll > savingThrow) {
                 defender.healthPoints = defender.healthPoints - halfD;
                 tick.add(attacker.title +" hit " + defender.title + ""
-                        + " with a " + title + " causing " + halfD + " damage.");
+                        + " with a " + title + " for " + halfD + " damage.\n");
                 h.checkCharacterLife(defender);
                 h.healthReport(defender);
                 

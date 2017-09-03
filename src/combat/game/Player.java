@@ -141,7 +141,7 @@ public class Player extends Character{
          int oldLevel = level;
          int newLevel = getLevel();
          if (newLevel > oldLevel) {
-             System.out.println("Congradulation you are now Level " + level);
+             tick.add("Congradulation you are now Level " + level +"\n");
              for (int i = 0; i < (newLevel - oldLevel); i++) {
                 levelUp(); 
              }

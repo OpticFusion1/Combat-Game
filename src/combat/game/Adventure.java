@@ -40,9 +40,14 @@ public class Adventure {
         }  
         }
         if (player1.alive == true) {
-            Room finalRoom = map.redKeep.get(map.redKeep.size());
+            Room finalRoom = map.redKeep.get(map.redKeep.size()-1);
             player1.addPlayerToNewRoom (player1, finalRoom, finalRoom.roomTiles[1][1]);
             combatGame.CombatGame(finalRoom, player1);
         }
+        if (player1.alive == true) {
+            player1.tick.addFast("Victory! You have cleared the Red Keep!");
+        }
+        }
+        
     }
-}
+

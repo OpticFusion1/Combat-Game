@@ -89,11 +89,12 @@ public class Character {
     }
 }
     void moveChar (Character c, int d) throws InterruptedException {
+        tick.turnOnTicker (c.roomAddress.outPut);
         Cell oldPostion = c.cellAddress;
         c.cellAddress.cellAddressCountOff();
         if (d == 2) {
             //go south
-            System.out.println(c.title + " moved south.");
+            tick.add(c.title + " moved south.\n");
             if (
         c.roomAddress.roomTiles[c.charPoint.y +1][c.charPoint.x].cellStructure.passable == true  ) {
              c.charPoint.translate(0, 1);   
@@ -102,7 +103,7 @@ public class Character {
         }
         if (d == 4) {
             //go west
-            System.out.println(c.title + " moved west.");
+            tick.add(c.title + " moved west.\n");
             if (
         c.roomAddress.roomTiles[c.charPoint.y][c.charPoint.x-1].cellStructure.passable == true) {
              c.charPoint.translate(-1, 0);   
@@ -111,7 +112,7 @@ public class Character {
         }
         if (d == 6) {
             //go east
-            System.out.println(c.title + " moved east.");
+            tick.add(c.title + " moved east.\n");
             if (c.roomAddress.roomTiles[c.charPoint.y][c.charPoint.x+1].cellStructure.passable == true) {
                 c.charPoint.translate(1, 0);
             }
@@ -119,7 +120,7 @@ public class Character {
         }
         if (d == 8) {
             //go north
-            System.out.println(c.title + " moved north.");
+            tick.add(c.title + " moved north.\n");
         if (c.roomAddress.roomTiles[c.charPoint.y-1][c.charPoint.x].cellStructure.passable == true) {
              c.charPoint.translate(0, -1);
         }    
@@ -134,7 +135,8 @@ public class Character {
         }
         else {
             tick.add(c.title + " is blocked by a "
-                    + "" + c.roomAddress.roomTiles[c.charPoint.y][c.charPoint.x].cellStructure.title);
+                    + "" + c.roomAddress.roomTiles[c.charPoint.y][c.charPoint.x].cellStructure.title +
+                    "\n");
         }
         c.roomAddress.drawRoom();
         //if (c.roomAddress.roomTiles[P.y][P.x]
@@ -157,7 +159,8 @@ public class Character {
 
 }
     public void reportStats() throws InterruptedException {
-        tick.add("Title:" + title +"  lvl:" + level + "  XP:" + XP + ""
+                tick.turnOnTicker (roomAddress.outPut);
+        tick.updateInfo("Title:" + title +"  lvl:" + level + "  XP:" + XP + ""
                 + "  HP:" +healthPoints + "/" + MaxHealth);
     }
 }

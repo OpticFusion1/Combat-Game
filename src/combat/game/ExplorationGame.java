@@ -14,8 +14,9 @@ public class ExplorationGame {
          
      }
     public void explorationGamePrompt(Scanner in, Character user) throws InterruptedException {
+         tick.turnOnTicker(user.roomAddress.outPut);
         user.reportStats();
-        System.out.println("Exploration Options: Enter a number and hit enter:\n"
+        tick.updateActionBar("Exploration:"
                 + "1: Equip Weapon   "
                 + "2: Prepare Spell   "
                 + "3: Use Item     "
@@ -33,7 +34,7 @@ public class ExplorationGame {
             
         }
         if (exploreMode == 3) {
-            System.out.println("Invantory:  Enter item number.");
+            tick.updateActionBar("Invantory:  Enter item number.");
             openInventoryExplore(user);
             
         }
@@ -54,19 +55,23 @@ public class ExplorationGame {
          }
     }
     private void selectWeapon(Character user) {
+        String s = new String("");
  for (int d = 0; d < user.weaponInventory.size(); d++) {
-            System.out.println((d+1) + ":" + user.weaponInventory.get(d).title); 
+            s += ((d+1) + ":" + user.weaponInventory.get(d).title + "  "); 
         } 
+        tick.updateActionBar(s);
         int itemSelect = in.nextInt();  // User input here
-        System.out.println(user.weaponInventory.get(itemSelect-1).title);
+        tick.addFast(user.weaponInventory.get(itemSelect-1).title);
         user.weaponEquiped = user.weaponInventory.get(itemSelect-1);
     }
     private void prepareSpell(Character user) {
+        String s = new String("");
         for (int d = 0; d < user.spellBook.size(); d++) {
-            System.out.println((d+1) + ":" + user.spellBook.get(d).title); 
+            s += ((d+1) + ":" + user.spellBook.get(d).title); 
         } 
+        tick.updateActionBar(s);
         int spellSelect = in.nextInt();  // User input here
-        System.out.println(user.spellBook.get(spellSelect-1).title + " prepared.");
+        tick.addFast(user.spellBook.get(spellSelect-1).title + " prepared.");
         user.preparedSpell = user.spellBook.get(spellSelect-1);
     
     
@@ -74,18 +79,20 @@ public class ExplorationGame {
     
     }
     private void openInventoryExplore(Character user) throws InterruptedException {
-            System.out.println("0: Close Inventory");
+        String s = new String("");
+            s += ("0: Close Inventory  ");
         for (int d = 0; d < user.inventory.size(); d++) {
             
-            System.out.println((d+1) + ": " + user.inventory.get(d).title + ""
-                    + " (" + user.inventory.get(d).quantity + ")"); 
+            s += ((d+1) + ": " + user.inventory.get(d).title + ""
+                    + " (" + user.inventory.get(d).quantity + ")  "); 
         } 
+        tick.updateActionBar(s);
         int itemSelect = in.nextInt();  // User input here
         if (itemSelect == 0) {
             explorationGamePrompt (in, user);
         }
         else {
-         System.out.println(user.inventory.get(itemSelect-1).title);
+         tick.addFast("Used " + user.inventory.get(itemSelect-1).title);
         user.inventory.get(itemSelect-1).use(user);
         for (int d = 0; d < user.inventory.size(); d++) {
             if (user.inventory.get(d).quantity <= 0) {
@@ -116,7 +123,7 @@ public class ExplorationGame {
     private void exploreMovePrompt(Scanner in, Character user) throws InterruptedException {
         
             
-            System.out.println("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
+            tick.updateActionBar("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
             user.roomAddress.drawRoom();
             int moveDirection = in.nextInt();  // User input here
             if (moveDirection != 5) {
@@ -128,6 +135,7 @@ public class ExplorationGame {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void lootBody(Character user) throws InterruptedException {
+        String s = new String("");
         //user.roomAddress.roomContains.get(0).inventory
                 Character loot = new Character();
                 for (int k = 0; k < user.cellAddress.cellContains.size(); k++) {
@@ -140,12 +148,13 @@ public class ExplorationGame {
                    
                 
                 
-            System.out.println("0: Close Inventory");
+            s += ("0: Close Inventory");
         for (int d = 0; d < loot.inventory.size(); d++) {
             
-            System.out.println((d+1) + ": " + loot.inventory.get(d).title + ""
+            s += ((d+1) + ": " + loot.inventory.get(d).title + ""
                     + " (" + loot.inventory.get(d).quantity + ")"); 
         } 
+        tick.updateActionBar(s);
         int itemSelect = in.nextInt();  // User input here
         if (itemSelect == 0) {
             explorationGamePrompt (in, user);
