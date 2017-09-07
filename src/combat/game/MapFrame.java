@@ -2,7 +2,8 @@ package combat.game;
 
 import java.util.Scanner;
 import java.awt.*;
-import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
@@ -10,6 +11,10 @@ import javax.swing.text.DefaultCaret;
 
 public class MapFrame extends JFrame {
     
+    int promptMode;
+    KeyListener key;
+    int chose;
+    boolean awaitingInput = true;
     Ruler ruler = new Ruler();
     Ticker tick = new Ticker();
     Dice dice = new Dice();
@@ -34,10 +39,20 @@ public class MapFrame extends JFrame {
     
     public MapFrame () {
         super("Adventure Map");
+
         
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         scrollPanel.add(actionArea);
+        actionArea.setEditable(false);
+        mapArea.setEditable(false);
+        mapArea.setFocusable(false);
+        actionArea.addKeyListener(key);
+        actionArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                actionAreaKeyTyped(evt);
+            }
+        });
         scrollPanel.setViewportView(actionArea);
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,6 +116,41 @@ public class MapFrame extends JFrame {
             player1.tick.addFast("Victory! You have cleared the Red Keep!");
         }
         }
+    void actionAreaKeyTyped(java.awt.event.KeyEvent evt) {
+        
+        //actionArea.append("\n You clicked something.");
+        char k = evt.getKeyChar();
+        //actionArea.append("\nYou pressed " + k);
+        if (k == '1') {
+            chose = 1;
+    }
+        if (k == '2') {
+            chose = 2;
+    }
+        if (k == '3') {
+            chose = 3;
+    }
+        if (k == '4') {
+            chose = 4;
+    }
+        if (k == '5') {
+            chose = 5;
+    }
+        if (k == '6') {
+            chose = 6;
+    }
+        if (k == '7') {
+            chose = 7;
+    }
+        if (k == '8') {
+            chose = 8;
+    }
+        if (k == '9') {
+            chose = 9;
+    }
+        awaitingInput = false;
+        
+}
     void displayRoom (Room r) {
         mapArea.setText("");
         for (int i = 0; i < r.roomDisplay.size(); i++) {
@@ -134,6 +184,7 @@ public class MapFrame extends JFrame {
     //cc is short for current cell
 
     public void CombatGame (Room onlyRoom, Player player1) throws InterruptedException {
+        System.out.println("Start CombatGame");
         player1.spellSlotLeft = player1.spellSlotMax;
         turnBeans = 0;
         selector.setNextEnemy(player1, player1);
@@ -141,8 +192,10 @@ public class MapFrame extends JFrame {
         combatManager(player1);
     }
     void combatManager(Player user) throws InterruptedException {
+        System.out.println("Start CombatManager");
         checkHostility(user.roomAddress, user);
         while (crIsHostile == true) {
+            
             checkHostility(user.roomAddress, user);
             if (crIsHostile == true && user.alive == true) {
             turnBeans++;
@@ -242,10 +295,19 @@ public class MapFrame extends JFrame {
         return a.faction != b.faction;
         
     }
+    void waitForInput() {
+        chose = 0;
+        awaitingInput = true;
+        while (awaitingInput) {
+            System.out.println("Waiting");
+            if (awaitingInput==false) {
+                break;
+            }
+        }
+    }
     void playerCombatPrompt (Scanner in, Player user) throws InterruptedException {
-        tick.turnOnTicker(user.roomAddress.outPut);
         
-       
+        tick.turnOnTicker(user.roomAddress.outPut);
         user.reportStats();
         tick.updateActionBar("Combat: "
                 + "1: " + user.weaponEquiped.title + "   "
@@ -253,60 +315,74 @@ public class MapFrame extends JFrame {
                 + "3: Use Item     "
                 + "4: Change Target     "
                 + "5: Move");
-        int attackMode = in.nextInt();  // User input here
-        if (attackMode == 1) {
+        //int attackMode = in.nextInt();  // User input here
+        
+        waitForInput();
+        
+        if (chose == 1) {
             weaponAttack(user, user.target, user);
             
         }
-        if (attackMode == 2) {
+        if (chose == 2) {
             usePreparedSpell(user, user.target, user);
             
         }
-        if (attackMode == 3) {
+        if (chose == 3) {
             tick.add("Inventory:  Enter item number.\n");
             openInventory(user, user.target);
             
         }
-        if (attackMode == 4) {
+        if (chose == 4) {
+            changeTarget(in, user);
+
+            
+        }
+        if (chose == 5) {
+            moveMode(user);
+            
+            
+        }
+    }
+    void moveMode(Player user) throws InterruptedException{
+        promptMode = 11;
+        
+       for (int moves = stepsLeft; moves > 0; moves--) {
+            tick.add("You have " + moves + " left.\n");
+            tick.updateActionBar("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
+            user.roomAddress.drawRoom();
+            waitForInput();
+            if (chose == 5) {
+            break;
+            }
+            user.moveChar(user, chose);
+            }
+            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
+            playerCombatPromptNoMove(in, user); 
+    }
+    void changeTarget(Scanner in, Player user) throws InterruptedException {
+            promptMode = 10;
+            
             tick.updateActionBar("Enter target number.");
             user.roomAddress.drawRoomSelection ();
-            int newTargetNumber = in.nextInt();  // User input here
-            user.target = user.roomAddress.roomContains.get(newTargetNumber-1);
+            
+            waitForInput();
+            user.target = user.roomAddress.roomContains.get(chose-1);
             tick.add("New target: "
                 + user.target.title + "\n");
             tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
             user.roomAddress.drawRoom();
             playerCombatPromptNoMove(in, user);
-            
-        }
-        if (attackMode == 5) {
-            for (int moves = stepsLeft; moves > 0; moves--) {
-            tick.add("You have " + moves + " left.\n");
-            tick.updateActionBar("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
-            user.roomAddress.drawRoom();
-            int moveDirection = in.nextInt();  // User input here
-            if (moveDirection == 5) {
-            break;
-            }
-            user.moveChar(user, moveDirection);
-            }
-            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
-            playerCombatPromptNoMove(in, user);
-            
-        }
     }
     void playerCombatPromptNoMove (Scanner in, Player user) throws InterruptedException {
-        
-        
-
-        
+        promptMode = 2;
         
         tick.updateActionBar("Combat:"
                 + "1: " + user.weaponEquiped.title + "   "
                 + "2: " + user.preparedSpell.title + " (" +user.spellSlotLeft+")  "
                 + "3: Use Item     "
                 + "4: Change Target");
-        int attackMode = in.nextInt();  // User input here
+        waitForInput();
+        int attackMode = chose;  // User input here
         if (attackMode == 1) {
             weaponAttack(user, user.target, user);
             
@@ -322,19 +398,10 @@ public class MapFrame extends JFrame {
             
         }
         if (attackMode == 4) {
-            tick.updateActionBar("Enter target number.");
-            user.roomAddress.drawRoomSelection ();
-            int newTargetNumber = in.nextInt();  // User input here
-            user.target = user.roomAddress.roomContains.get(newTargetNumber-1);
-            tick.add("New target: "
-                + user.target.title + "\n");
-            tick.add("Distance: " + ruler.measureDistance(user, user.target) + "\n");
-            playerCombatPromptNoMove(in, user);
-            
-        }
+           changeTarget(in, user);}
     }
     void displayRoomOccupants (Room r, Player player) throws InterruptedException {
-         tick.turnOnTicker(r.outPut);
+        tick.turnOnTicker(r.outPut);
         tick.add("Characters in Combat: \n");
         for (int i = 0; i < r.roomContains.size(); i++) {
             if (r.roomContains.get(i).alive == true) {
@@ -387,6 +454,7 @@ public class MapFrame extends JFrame {
         
     }    
     public void openInventory(Player user, Character target) throws InterruptedException {
+        promptMode = 3;
             String s = new String("");
             s += ("0: Close Inventory");
             
@@ -396,7 +464,8 @@ public class MapFrame extends JFrame {
                     + " (" + user.inventory.get(d).quantity + ")"); 
         } 
         tick.updateActionBar(s);
-        int itemSelect = in.nextInt();  // User input here
+        waitForInput();
+        int itemSelect = chose;
         if (itemSelect == 0) {
             playerCombatPromptNoMove (in, user);
         }
@@ -448,6 +517,7 @@ public class MapFrame extends JFrame {
          
      }
     public void explorationGamePrompt(Scanner in, Character user) throws InterruptedException {
+        promptMode = 4;
          tick.turnOnTicker(user.roomAddress.outPut);
         user.reportStats();
         tick.updateActionBar("Exploration:"
@@ -458,7 +528,8 @@ public class MapFrame extends JFrame {
                 + "5: Move  "
                 + "6: Loot body  "
                 + "7: Next Room");
-        int exploreMode = in.nextInt();  // User input here
+        waitForInput();
+        int exploreMode = chose;  // User input here
         if (exploreMode == 1) {
             selectWeapon(user);
             
@@ -489,22 +560,26 @@ public class MapFrame extends JFrame {
          }
     }
     private void selectWeapon(Character user) {
+        promptMode = 5;
         String s = new String("");
  for (int d = 0; d < user.weaponInventory.size(); d++) {
             s += ((d+1) + ":" + user.weaponInventory.get(d).title + "  "); 
         } 
         tick.updateActionBar(s);
-        int itemSelect = in.nextInt();  // User input here
+        waitForInput();
+        int itemSelect = chose;  // User input here
         tick.addFast(user.weaponInventory.get(itemSelect-1).title);
         user.weaponEquiped = user.weaponInventory.get(itemSelect-1);
     }
     private void prepareSpell(Character user) {
+        promptMode = 6;
         String s = new String("");
         for (int d = 0; d < user.spellBook.size(); d++) {
             s += ((d+1) + ":" + user.spellBook.get(d).title); 
         } 
         tick.updateActionBar(s);
-        int spellSelect = in.nextInt();  // User input here
+        waitForInput();
+        int spellSelect = chose;  // User input here
         tick.addFast(user.spellBook.get(spellSelect-1).title + " prepared.");
         user.preparedSpell = user.spellBook.get(spellSelect-1);
     
@@ -513,6 +588,7 @@ public class MapFrame extends JFrame {
     
     }
     private void openInventoryExplore(Character user) throws InterruptedException {
+        promptMode = 7;
         String s = new String("");
             s += ("0: Close Inventory  ");
         for (int d = 0; d < user.inventory.size(); d++) {
@@ -521,7 +597,8 @@ public class MapFrame extends JFrame {
                     + " (" + user.inventory.get(d).quantity + ")  "); 
         } 
         tick.updateActionBar(s);
-        int itemSelect = in.nextInt();  // User input here
+        waitForInput();
+        int itemSelect = chose;  // User input here
         if (itemSelect == 0) {
             explorationGamePrompt (in, user);
         }
@@ -543,8 +620,8 @@ public class MapFrame extends JFrame {
         for (int i = 0; i < user.roomAddress.roomNPCs.size(); i++) {
             if (user.roomAddress.roomNPCs.get(i).faction == 1) {
                 friendly = user.roomAddress.roomNPCs.get(i);
-                tick.add(user.title + " and " + friendly.name + " are speaking.");
-                tick.add(friendly.talkText);
+                tick.add("\n"+user.title + " and " + friendly.name + " are speaking.");
+                tick.add("\n"+friendly.talkText);
                 talked = true;
             }
             
@@ -555,11 +632,13 @@ public class MapFrame extends JFrame {
         }
     }
     private void exploreMovePrompt(Scanner in, Character user) throws InterruptedException {
+        promptMode = 8;
         
             
             tick.updateActionBar("Enter direction: 2:South 4:West 6:East 8:Noth 5:End Move.");
             user.roomAddress.drawRoom();
-            int moveDirection = in.nextInt();  // User input here
+            waitForInput();
+            int moveDirection = chose;  // User input here
             if (moveDirection != 5) {
                 user.moveChar(user, moveDirection);
                 exploreMovePrompt(in, user);
@@ -569,6 +648,7 @@ public class MapFrame extends JFrame {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void lootBody(Character user) throws InterruptedException {
+        promptMode = 9;
         String s = new String("");
         //user.roomAddress.roomContains.get(0).inventory
                 Character loot = new Character();
@@ -589,7 +669,8 @@ public class MapFrame extends JFrame {
                     + " (" + loot.inventory.get(d).quantity + ")"); 
         } 
         tick.updateActionBar(s);
-        int itemSelect = in.nextInt();  // User input here
+        waitForInput();
+        int itemSelect = chose;  // User input here
         if (itemSelect == 0) {
             explorationGamePrompt (in, user);
         }
@@ -607,6 +688,8 @@ public class MapFrame extends JFrame {
         
         
     }
+
+
     }
         
     
