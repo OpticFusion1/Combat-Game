@@ -17,10 +17,13 @@ public class Character {
     boolean hostile;
     Weapon weaponEquiped;
     Spell preparedSpell;
+    int spellSlotMax;
+    int spellSlotLeft;
     ArrayList<Spell> spellBook = new ArrayList();
     ArrayList<Weapon> weaponInventory = new ArrayList();
     int XP;
     int spotInArray;
+    MapFrame cg;
     int sightRange;
     int selectionNumber;
     Cell cellAddress;
@@ -44,8 +47,7 @@ public class Character {
     int attackDamage;
     int armorClass;
     int speed;
-    int initiative;    
-    CombatGame cg = new CombatGame();
+    int initiative;
     //ability scores
     int strength;
     int strengthModifier;
@@ -84,7 +86,7 @@ public class Character {
         enemy.target = player;
         d = ruler.measureDistance(enemy, player);
         if (d < enemy.weaponEquiped.range && enemy.alive == true && enemy.hostile == true) {
-            cg.weaponAttack(enemy, player, player);
+            player.roomAddress.outPut.weaponAttack(enemy, player, player);
         
     }
 }

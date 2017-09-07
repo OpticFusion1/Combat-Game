@@ -16,6 +16,7 @@ public class Player extends Character{
         hitPointDie = 10;
         numberOfHitPointDice = 1;
         hitPointModifier = 3;
+        spellSlotMax = 1;
         
         MaxHealth = healthPoints;
         attackDamage = 12;
@@ -81,6 +82,7 @@ public class Player extends Character{
         }
         if (XP >= 900) {
             level = 3;
+            spellSlotMax = 2;
         }
         if (XP >= 2700) {
             level = 4;
