@@ -11,6 +11,7 @@ package combat.game;
  */
 public class Weapon {
         String title;
+        Ticker tick = new Ticker();
         //example. use verb for sword is swing, but for sword is shot
         String useVerb;
         int goldValue;
@@ -19,19 +20,20 @@ public class Weapon {
         double standOff;
         int attackDamage;
         
- public boolean use(Character user) {
+ public boolean use(Character user) throws InterruptedException {
+     tick.turnOnTicker(user.roomAddress.outPut);
      Ruler r = new Ruler();
      Dice dice = new Dice();
      
  
      double d = r.measureDistance(user, user.target);
         if (d > range) {
-        System.out.println("Target out of range.");
+        tick.add("Target out of range.\n");
         return false;
         }
         if (d <= range) {
-        System.out.println(user.title + " " + useVerb + " at " + user.target.title + ""
-                + " with a " + title + ".");
+        tick.add(user.title + " " + useVerb + " at " + user.target.title + ""
+                + " with a " + title + ".\n");
         if (dice.rollDice(20) + user.proficiencyBonus >= user.target.armorClass) {
             user.target.healthPoints = user.target.healthPoints-user.attackDamage;
             return true;

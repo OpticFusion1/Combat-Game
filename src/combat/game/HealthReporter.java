@@ -7,12 +7,13 @@ package combat.game;
 public class HealthReporter {
     Ticker tick = new Ticker();
         void healthReport(Character c) throws InterruptedException {
-        System.out.print(c.title);
+        tick.turnOnTicker(c.roomAddress.outPut);
+        tick.addFast(c.title);
         if (c.alive == false) {
-            tick.add(" Corpse");
+            tick.addFast(" Corpse");
             
         }
-        System.out.println(": HP    " + c.healthPoints);
+        tick.addFast(": HP    " + c.healthPoints + "\n");
 
      }
             public boolean checkCharacterLife(Character c) {

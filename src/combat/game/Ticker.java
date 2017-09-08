@@ -1,17 +1,32 @@
 package combat.game;
 
-import java.util.ArrayList;
+
 
 public class Ticker {
-    ArrayList<String> scroll = new ArrayList();
+    MapFrame outPut;
+    void turnOnTicker (MapFrame f) {
+        outPut = f;
+    }
+    
+
     int printedLine;
     
   void add(String s) throws InterruptedException {
-    scroll.add(s);
     Thread.sleep(300);
-    System.out.println(s);
+    outPut.tickerTape(s);
 }  
+    void addFast(String s) {
+    outPut.tickerTape(s);
+    }
   void tock() throws InterruptedException {
       Thread.sleep(500);
   }
+  void updateInfo(String s) {
+      outPut.displayInfo(s);
+          }
+  void updateActionBar(String s) {
+      outPut.displayActions(s);
+          }
+  
+  
 }

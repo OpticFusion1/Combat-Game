@@ -4,20 +4,27 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Player.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/test/Test/TestJFrame.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/TargetSelector.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/ShortSword.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/FireOil.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Ticker.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Room.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/OrcWarChief.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/test/Test/TestKeyListener.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/NewJFrame.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/LongSword.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Item.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Adventure.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Wall.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/NPC.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/ExplorationGame.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Human.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/test/Test/BookTester.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Goblin.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/GoblinBoss.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Spell.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Weapon.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/HealingPotion.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Character.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Orc.java</file>
@@ -29,6 +36,7 @@
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/CombatGame.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/MapFrame.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/Map.java</file>
+            <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/test/Test/Book.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/FloorTile.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/LightningBolt.java</file>
             <file>file:/C:/Users/Chris/Documents/NetBeansProjects/Combat%20Game/src/combat/game/HealthReporter.java</file>

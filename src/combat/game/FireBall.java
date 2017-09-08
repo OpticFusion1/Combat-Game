@@ -5,6 +5,7 @@ package combat.game;
  * @author Chris
  */
 public class FireBall extends Spell{
+     Ticker tick = new Ticker();
     Dice dice = new Dice();
     TargetSelector selector = new TargetSelector();
     HealthReporter h = new HealthReporter();
@@ -17,11 +18,12 @@ public class FireBall extends Spell{
         standOff = 0;
     }
     public void use(Character attacker, Character defender, Player player) throws InterruptedException {
+         tick.turnOnTicker(player.roomAddress.outPut);
         double dis = ruler.measureDistance(attacker, defender);
         if (dis <= range && dis >= standOff) {
         Cell blastCell;
         blastCell = defender.cellAddress;
-        tick.add(attacker.title + " throws a fire ball at " + defender.title);
+        tick.add(attacker.title + " throws a fire ball at " + defender.title + "\n");
         int d = dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6)
                 + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6) + dice.rollDice(6);
         int halfD = d/2;
@@ -34,7 +36,7 @@ public class FireBall extends Spell{
             if (iRoll <= savingThrow) {
                 blastCell.cellContains.get(i).healthPoints = blastCell.cellContains.get(i).healthPoints-d;
                 tick.add(attacker.title +" hit " + blastCell.cellContains.get(i).title + ""
-                        + " with a fire ball causing " + d + " damage.");
+                        + " with a fire ball causing " + d + " damage.\n");
                 h.checkCharacterLife(blastCell.cellContains.get(i));
                 h.healthReport(blastCell.cellContains.get(i));
             }
@@ -42,7 +44,7 @@ public class FireBall extends Spell{
             if (iRoll > savingThrow) {
                 blastCell.cellContains.get(i).healthPoints = blastCell.cellContains.get(i).healthPoints - halfD;
                 tick.add(attacker.title +" hit " + blastCell.cellContains.get(i).title + ""
-                        + " with a fire ball causing " + halfD + " damage.");
+                        + " with a fire ball causing " + halfD + " damage.\n");
                 h.checkCharacterLife(blastCell.cellContains.get(i));
                 h.healthReport(blastCell.cellContains.get(i));
                 
@@ -54,10 +56,10 @@ public class FireBall extends Spell{
         
     }
         if (dis > range) {
-            System.out.println("Target out of Fire Ball range");
+            tick.add("Target out of Fire Ball range\n");
         }
         if (dis < standOff) {
-            System.out.println("You are too close to use Fire Ball");
+            tick.add("You are too close to use Fire Ball\n");
         }
     }
 

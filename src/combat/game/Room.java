@@ -48,7 +48,7 @@ public class Room {
         
     }
         void drawRoom() {
-            outPut.mapArea.setText("");
+
             roomDisplay.clear();
         for (int row = 0 ; row < height; row++) {
             for (int col = 0 ; col < width; col++){
@@ -60,6 +60,24 @@ public class Room {
         }
         outPut.displayRoom(this);
         }
+        void drawRoomSelection() {
+        roomDisplay.clear();
+        for (int i = 0; i < roomContains.size(); i++) {
+                roomContains.get(i).selectionNumber = i + 1;
+            }
+        for (int row = 0 ; row < height; row++) {
+            for (int col = 0 ; col < width; col++){
+              if (roomTiles[row][col].cellOccupied() == true) {
+                 roomDisplay.add(roomTiles[row][col].cellContains.get(0).selectionNumber + " "); 
+              }
+              else {
+                  roomDisplay.add(roomTiles[row][col].icon + " ");
+              }
+            }
+            roomDisplay.add("\n");
+}
+  outPut.displayRoom(this);      
+}
         
 }
         
